@@ -70,6 +70,13 @@ foreach(@ids) {
 
 
 
+    if($cardata{Ime}=~/alfa romeo/i) {
+        print "nocemo alfe, skippaj oglas $i \n";
+        next;
+    }
+
+
+
 
 
     if($cardata{Cena}<5101) {
