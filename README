@@ -1,7 +1,7 @@
 avto-net-notifications
 ======================
 
-Sends emails when chosen car appears on avto.net 
+Pošlje mail ko pride oglas za avto z določenimi pogoji (user selected, cena, starost ipd) na avto.net
 
 Beta, verjetno v nasprotju z TOS-om, ne odgovarjam, ce skripta kaj unici, bla bla bla, standard
 
