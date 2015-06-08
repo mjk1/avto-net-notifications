@@ -46,7 +46,7 @@ foreach(@ids) {
 
 # $VAR1 = {
 #           'ID' => <ID>,
-#           'Letnik' => 2008,
+#           'Letnik proizvodnje' => 2008,
 #           'Stevilo vrat' => '5 vr.',
 #           'Kraj ogleda' => '<a  href="ad.asp?ID=<ID>&show=3" target="_self"><b>Maribor, naslov1</b></a>',
 #           'Image1html' => '<img src="http://images.avto.net/<ID>/1.jpg">',
@@ -80,7 +80,7 @@ foreach(@ids) {
 
 
     if($cardata{Cena}<5101) {
-        if($cardata{Letnik}>2006) {
+        if($cardata{'Letnik proizvodnje'}>2006) {
             sendemail(\%cardata,"USER\@gmail.com");
             print Dumper(\%cardata); #debug
         }
@@ -220,7 +220,7 @@ $top100url="http://www.avto.net/_AVTO/results_100.asp";
 $top100html=get $top100url;
 
 
-@ids=$top100html=~/ad\.asp\?id=(\d+)>/g;
+@ids=$top100html=~/ad\.asp\?id=(\d+)&avto=.*?>/g;
 
 @ids=uniq(@ids);
 @ids=sort(@ids);
@@ -244,7 +244,7 @@ sub sendemail {
     my $msg = MIME::Lite->new(
         From    => 'Avto.net tracker <lilly@mulaz.org',
 	To      => $email,
-	Subject => "$cardata{Ime} - $cardata{Letnik} letnik - $cardata{Cena} EUR",
+	Subject => "$cardata{Ime} - $cardata{'Letnik proizvodnje'} letnik - $cardata{Cena} EUR",
 	Type    => 'multipart/mixed'
 	);	
     
