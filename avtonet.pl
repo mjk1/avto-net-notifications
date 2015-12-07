@@ -242,7 +242,7 @@ sub sendemail {
     my $cardata=shift;
     my $email = shift;
     my $msg = MIME::Lite->new(
-        From    => 'Avto.net tracker <lilly@mulaz.org',
+        From    => 'Avto.net tracker <user@server.org>',
 	To      => $email,
 	Subject => "$cardata{Ime} - $cardata{'Letnik proizvodnje'} letnik - $cardata{Cena} EUR",
 	Type    => 'multipart/mixed'
