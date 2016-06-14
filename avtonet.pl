@@ -215,12 +215,11 @@ sub gettop100 {
 
 #print "get top 100\n";    
 
-$top100url="http://www.avto.net/_AVTO/results_100.asp";
-
+$top100url="http://www.avto.net/Ads/results_100.asp";
 $top100html=get $top100url;
 
 
-@ids=$top100html=~/ad\.asp\?id=(\d+)&avto=.*?>/g;
+@ids=$top100html=~/Ads\/details\.asp\?id=(\d+)&display=.*\">/g;
 
 @ids=uniq(@ids);
 @ids=sort(@ids);
