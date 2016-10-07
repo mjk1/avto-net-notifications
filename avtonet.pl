@@ -100,35 +100,45 @@ sub getcarinfo {
     my $car1id=shift;
 
     my $car1url="http://avto.net/_AVTO/ad.asp?ID=$car1id";
-#    print $car1url ."\n";
+    print $car1url ."\n" if $verbose>1;
     my $carhtml=get $car1url;
-#    print $carhtml;
+    print $carhtml if $verbose>2;
     my %cardata;
+
+	print $car1url + "\n" if $debug;
+	print $carhtml if $debug;
 
     $cardata{URL}=$car1url;
     $cardata{ID}=$car1id;
 
 
-    if($carhtml=~/<p class="AdDataCenaTOP" >\n*\s*?(.*?)\n*\s*<\/p>/) {
+    if($carhtml=~/<div class="OglasPrice">\n*\s*?(.*?)\n*\s*<\/div>/) {
 	print "matcha cena $1\n" if $debug;
 	$cena=$1;
 	chomp $cena;
 	$cena=~s/\D//g;
-#	print "cena: $cena\n";
+
+	print "cena: $cena\n" if $debug;
+	
+
+
 	$cardata{Cena}=$cena;
     }
     else {
 	die("ni cene");
     }
 
-
-
-    if($carhtml=~/<title>(.*)<\/title>/) {
+    if($carhtml=~/<meta name="description" content="Prodamo:(.*):: www.Avto.net ::">/) {
 	print "matcha title $1 \n" if $debug;
 	$ime=$1;
 	$ime=~s/ :: www.Avto.net :://g;
 	chomp($ime);
-#	print "ime: $ime\n";
+
+	print "ime: $ime\n" if $debug;
+	
+
+
+
         $ime=~s/č/c/g;
         $ime=~s/Č/C/g;
         $ime=~s/Š/S/g;
@@ -149,8 +159,8 @@ sub getcarinfo {
 #    $carhtml=~s/\n//g;
     $carhtml=~s/\r//g;
     $carhtml=~s/&nbsp;/ /g;
-    while($carhtml=~/<div class="AdData"[^>]*?>\n\s*<div class="AdDataLeft">(.+?)<\/div>\n\s*<div class="AdDataRight">(.+?)<\/div>\n\s*\n?\s*<\/div>/g) {
-#	print "$1 $2\n";
+    while($carhtml=~/<div class="OglasData"[^>]*?>\n\s*<div class="OglasDataLeft">(.+?)<\/div>\n\s*<div class="OglasDataRight">(.+?)<\/div>\n\s*\n?\s*<\/div>/g) {
+	print "$1 $2\n" if $debug;
 	$cardatakey=$1;
 	$cardatavalue=$2;
 	$cardatakey=~s/://g;
@@ -171,17 +181,43 @@ sub getcarinfo {
 	$cardata{$cardatakey}=$cardatavalue;
     }
 
+while($carhtml=~/<div class="OglasEQRight"[^>]*?>- \s*(.+?)<\/div>/g) {
+	print "$1\n" if $debug;
+	$cardatakey=$1;
+	$cardatavalue=$1;
+	$cardatakey=~s/://g;
+	$cardatakey=~s/č/c/g;
+	$cardatakey=~s/Č/C/g;
+	$cardatakey=~s/Š/S/g;
+	$cardatakey=~s/š/s/g;
+	$cardatakey=~s/Ž/Z/g;
+	$cardatakey=~s/ž/z/g;
+
+	$cardatavalue=~s/č/c/g;
+	$cardatavalue=~s/Č/C/g;
+	$cardatavalue=~s/Š/S/g;
+	$cardatavalue=~s/š/s/g;
+	$cardatavalue=~s/Ž/Z/g;
+	$cardatavalue=~s/ž/z/g;
+
+	$cardata{$cardatakey}=$cardatavalue;
+    }
+
 
 #lokacija
-#    print $carhtml;
+
+
+    print $carhtml if $debug;
+
     if($carhtml=~/graphics\/slo(..)\.gif/s) {#
 	$lokacija=$1;
-#	print "lokacija $lokacija\n";
+
+	print "lokacija $lokacija\n" if $debug;
+	
+
+
 	$cardata{Lokacija}=$lokacija;
    }
-
-
-
 
     $imgurl="http://images.avto.net/$car1id/1.jpg";
 
@@ -190,7 +226,7 @@ sub getcarinfo {
 	$cardata{Image1}=$imgurl;
 	$cardata{Image1html}="<img src=\"$imgurl\">";
 
-#	print "Ima sliko";
+	print "Ima sliko" if $debug;
     }
 
 
@@ -198,12 +234,9 @@ sub getcarinfo {
 
 
 
-#    print Dumper(\%cardata);
+    print Dumper(\%cardata) if $debug;
 
     return %cardata;
-
-
-
 
 }
 
