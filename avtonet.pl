@@ -128,7 +128,7 @@ sub getcarinfo {
 	die("ni cene");
     }
 
-    if($carhtml=~/<meta name="description" content="Prodamo:(.*):: www.Avto.net ::">/) {
+	if($carhtml=~/<meta name="description" content="(.*):: www.Avto.net ::">/) {
 	print "matcha title $1 \n" if $debug;
 	$ime=$1;
 	$ime=~s/ :: www.Avto.net :://g;
